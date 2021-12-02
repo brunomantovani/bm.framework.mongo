@@ -1,0 +1,18 @@
+image:
+  name: mcr.microsoft.com/dotnet/core/sdk:3.1
+
+  buildAndTestApp: &buildAndTestApp
+    name: Build & Test
+    caches:
+      - dotnetcore
+    script:
+      # Restore Packages
+      - dotnet restore $BITBUCKET_REPO_SLUG.sln
+      # Build Solution
+      - dotnet build $BITBUCKET_REPO_SLUG.sln --no-restore
+      # Test Solution
+      - dotnet test $BITBUCKET_REPO_SLUG.sln --no-build --no-restore
+
+pipelines:
+  default:
+    - step: *buildAndTestApp
